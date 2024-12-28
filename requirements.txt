@@ -1,0 +1,8 @@
+phidata 
+openai 
+duckduckgo-search
+packaging
+yfinance
+groq
+exa_py
+streamlit
