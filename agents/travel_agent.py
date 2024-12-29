@@ -1,12 +1,15 @@
 from phi.agent import Agent
 from phi.model.openai import OpenAIChat
 from phi.tools.exa import ExaTools
-from phi.tools.duckduckgo import DuckDuckGo
+import os
+
+exa_api_key = os.getenv("EXA__API_KEY")
+
 itinerary_agent = Agent(
     name="Itinerary Planner",
     role="Planner",
     model=OpenAIChat(id="gpt-4o", ),
-    tools=[ExaTools(api_key="  ")],
+    tools=[ExaTools(api_key=exa_api_key)],
     description="You are an expert itinerary planning agent. Your role is to create detailed day-by-day travel plans.",
     instructions=[
         "Use Exa to find relevant information and suggestions for the itinerary from famous travel websites",
@@ -20,7 +23,7 @@ hotel_agent = Agent(
     name="Hotel Finder",
     role="Finder",
     model=OpenAIChat(id="gpt-4o", ),
-    tools=[ExaTools(api_key="  ")],
+    tools=[ExaTools(api_key=exa_api_key)],
     description="You are an expert hotel recommendation agent. Your role is to find suitable accommodations based on user preferences.",
     instructions=[
         "Use Exa to find relevant information and suggestions for hotels from popular booking websites",
@@ -34,7 +37,7 @@ destination_agent = Agent(
     name="Destination Picker",
     role="Picker",
     model=OpenAIChat(id="gpt-4o", ),
-    tools=[ExaTools(api_key="  ")],
+    tools=[ExaTools(api_key=exa_api_key)],
     description="You are an expert destination recommendation agent. Your role is to suggest suitable travel destinations based on user preferences.",
     instructions=[
         "Use Exa to find relevant information and suggestions for destinations from popular travel websites",
@@ -57,6 +60,6 @@ travel_team = Agent(
 )
 
 travel_team.print_response(
-    "I want to plan a 5-day trip to a beach destination in India for a family of 4. Our budget is $5000. We enjoy water sports and local cuisine.",
+    "I want to plan a 7-day trip to a beach destination in USA for a family of 4. Our budget is $5000. We enjoy water sports and local cuisine.",
     stream=True
 )

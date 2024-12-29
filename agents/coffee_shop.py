@@ -1,13 +1,16 @@
 from phi.agent import Agent
 from phi.model.openai import OpenAIChat
-from phi.tools.duckduckgo import DuckDuckGo
+from phi.tools.exa import ExaTools
 import streamlit as st
+import os
+
+exa_api_key = os.getenv("EXA__API_KEY")
 
 # Create the web search agent
 web_agent = Agent(
     name="Coffee Shop Agent",
-    model=OpenAIChat(id="gpt-4"),
-    tools=[DuckDuckGo()],
+    model=OpenAIChat(id="gpt-4o"),
+    tools=[ExaTools(api_key=exa_api_key)],
     instructions=["Always include sources when providing information about coffee shops."],
     show_tool_calls=True,
     markdown=True,
