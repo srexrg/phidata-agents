@@ -6,3 +6,4 @@ yfinance
 groq
 exa_py
 streamlit
+praw
