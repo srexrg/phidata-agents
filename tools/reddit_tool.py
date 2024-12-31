@@ -242,6 +242,11 @@ class RedditTools(Toolkit):
             logger.info(f"Creating post in r/{subreddit}")
 
             subreddit_obj = self.reddit.subreddit(subreddit)
+            
+            if flair:
+                available_flairs = [f['text'] for f in subreddit_obj.flair.link_templates]
+                if flair not in available_flairs:
+                    return f"Invalid flair. Available flairs: {', '.join(available_flairs)}"
 
             if is_self:
                 submission = subreddit_obj.submit(
