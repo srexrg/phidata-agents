@@ -130,6 +130,7 @@ class RedditTools(Toolkit):
             str: JSON string containing top posts.
         """
         if not self.reddit:
+            logger.info("Reddit client not initialized")
             return "Please provide Reddit API credentials"
 
         try:
@@ -146,6 +147,7 @@ class RedditTools(Toolkit):
             ]
             return json.dumps({"top_posts": top_posts})
         except Exception as e:
+            logger.error(f"Error getting top posts: {e}")
             return f"Error getting top posts: {e}"
 
     def get_subreddit_info(self, subreddit_name: str) -> str:
