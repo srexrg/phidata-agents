@@ -8,7 +8,7 @@ load_dotenv()
 trello = TrelloTools(
     api_key=os.getenv("api_key"),
     api_secret=os.getenv("secret"),
-    token=os.getenv("token")
+    token=os.getenv("token"),
 )
 
 
@@ -27,34 +27,7 @@ agent = Agent(
     show_tool_calls=True,
 )
 
-agent.print_response("inside the board my-project-board move card agent sir from todo list to 'New list' ", stream=True)
-
-
-# board_response = trello.create_board(
-#     name="My Project Board",
-#     description="Board for tracking project tasks",
-#     default_lists=True,
-# )
-
-# print(board_response)
-
-# list_response = trello.create_list(
-#     board_id="67754b1a0cf9b3612ab5a37a",
-#     list_name="New List",
-#     pos="bottom",
-# )
-
-# print(list_response)
-
-# card_response = trello.create_card(
-#     board_id="67754b1a0cf9b3612ab5a37a",
-#     list_name="To Do",
-#     card_title="Implement feature X",
-#     description="Details about feature X implementation",
-# )
-# print(card_response)
-
-# move_response = trello.move_card(
-#     card_id="67754cb4fa20a4208eaf67e8", list_id="67754bf13fccd9a01d11854c"
-# )
-# print(move_response)
+agent.print_response(
+    "Create a board called ai-agent and inside it create list called todo and doing and inside each of them create card called agent sir ",
+    stream=True,
+)

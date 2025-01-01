@@ -79,6 +79,8 @@ class TrelloTools(Toolkit):
             if not self.client:
                 return "Trello client not initialized"
 
+            logger.info(f"Creating card {card_title}")
+
             board = self.client.get_board(board_id)
             target_list = None
 
@@ -184,7 +186,7 @@ class TrelloTools(Toolkit):
         except Exception as e:
             return f"Error getting cards: {e}"
 
-    def create_board(self, name: str) -> str:
+    def create_board(self, name: str, default_lists:bool=False) -> str:
         """
         Create a new Trello board.
 
@@ -198,9 +200,9 @@ class TrelloTools(Toolkit):
             if not self.client:
                 return "Trello client not initialized"
 
-            board = self.client.add_board(
-                board_name=name
-            )
+            logger.info(f"Creating board {name}")
+
+            board = self.client.add_board(board_name=name, default_lists=default_lists)
 
             return json.dumps(
                 {
@@ -228,6 +230,8 @@ class TrelloTools(Toolkit):
         try:
             if not self.client:
                 return "Trello client not initialized"
+
+            logger.info(f"Creating list {list_name}")
 
             board = self.client.get_board(board_id)
             new_list = board.add_list(name=list_name, pos=pos)
@@ -259,7 +263,7 @@ class TrelloTools(Toolkit):
                 return "Trello client not initialized"
 
             self.client.info_for_all_boards(actions=actions)
-            
+
             if not hasattr(self.client, 'all_info'):
                 return json.dumps({"error": "No board information available"})
 
@@ -303,7 +307,7 @@ class TrelloTools(Toolkit):
                 return "Trello client not initialized"
 
             boards = self.client.list_boards(board_filter=board_filter)
-            
+
             boards_list = []
             for board in boards:
                 board_data = {
