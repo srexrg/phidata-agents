@@ -89,10 +89,10 @@ agent_team = Agent(
     markdown=True,
 )
 
-# Add at the beginning of the Streamlit UI section
+
 st.set_page_config(page_title="AI Assistant Team", page_icon="🤖", layout="wide")
 
-# Add sidebar with information
+
 with st.sidebar:
     st.title("🤖 AI Assistant Team")
     st.markdown("""
@@ -102,26 +102,25 @@ with st.sidebar:
     - 🌟 **Personal Assistant** - For general tasks, finance, and tech news
     """)
     
-    # Add a clear chat button
+
     if st.button("Clear Chat History"):
         st.session_state.messages = []
         st.rerun()
 
-# Main chat interface
 st.title("💬 Chat with AI Assistant Team")
 
-# Initialize chat history
+
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
-# Display chat messages with improved styling
+
 for message in st.session_state.messages:
     with st.chat_message(message["role"], avatar="🧑‍💻" if message["role"] == "user" else "🤖"):
         st.markdown(message["content"])
 
-# Chat input and response handling
+
 if prompt := st.chat_input("How can I help you today?"):
-    # Add a divider for better visual separation
+
     st.divider()
     
     with st.chat_message("user", avatar="🧑‍💻"):
@@ -133,7 +132,7 @@ if prompt := st.chat_input("How can I help you today?"):
         response_container = st.empty()
         full_response = ""
         
-        # Add a spinner while generating response
+
         with st.spinner("Thinking..."):
             for response in agent_team.run(prompt, stream=True):
                 full_response += response.content
