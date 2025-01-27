@@ -7,3 +7,6 @@ groq
 exa_py
 streamlit
 praw
+fastapi
+py-trello
+PyGithub
