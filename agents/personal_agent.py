@@ -1,4 +1,5 @@
 from phi.agent import Agent
+import streamlit as st
 from phi.tools.duckduckgo import DuckDuckGo
 from phi.tools.yfinance import YFinanceTools
 from phi.tools.hackernews import HackerNews
@@ -54,7 +55,6 @@ calendar_agent = Agent(
 )
 
 
-
 personal_assistant = Agent(
     name="Personal Assistant",
     tools=[
@@ -89,18 +89,56 @@ agent_team = Agent(
     markdown=True,
 )
 
-# Example usage
-# agent_team.print_response(
-#     "Crawl the website https://www.srexrg.me and summarize the content with urls if provided", stream=True
-# )
+# Add at the beginning of the Streamlit UI section
+st.set_page_config(page_title="AI Assistant Team", page_icon="🤖", layout="wide")
 
-# agent_team.print_response(
-#     "Search for the repo local-loop and get the details of the repo where the user is srexrg", stream=True
-# )
+# Add sidebar with information
+with st.sidebar:
+    st.title("🤖 AI Assistant Team")
+    st.markdown("""
+    This AI team consists of:
+    - 👨‍⚖️ **Legal Advisor** - For legal information and advice
+    - 📅 **Calendar Assistant** - For scheduling and managing appointments
+    - 🌟 **Personal Assistant** - For general tasks, finance, and tech news
+    """)
+    
+    # Add a clear chat button
+    if st.button("Clear Chat History"):
+        st.session_state.messages = []
+        st.rerun()
 
-# agent_team.print_response(
-#     "What are the penalties for spoofing Email Address ?", stream=True
-# )
-agent_team.print_response(
-    "Schedule a meeting on 28th January 2025 at 10:00 AM IST and add sreerag as the attendee mail id is sreeragp777@gmail.com", stream=True
-)
+# Main chat interface
+st.title("💬 Chat with AI Assistant Team")
+
+# Initialize chat history
+if "messages" not in st.session_state:
+    st.session_state.messages = []
+
+# Display chat messages with improved styling
+for message in st.session_state.messages:
+    with st.chat_message(message["role"], avatar="🧑‍💻" if message["role"] == "user" else "🤖"):
+        st.markdown(message["content"])
+
+# Chat input and response handling
+if prompt := st.chat_input("How can I help you today?"):
+    # Add a divider for better visual separation
+    st.divider()
+    
+    with st.chat_message("user", avatar="🧑‍💻"):
+        st.markdown(prompt)
+
+    st.session_state.messages.append({"role": "user", "content": prompt})
+
+    with st.chat_message("assistant", avatar="🤖"):
+        response_container = st.empty()
+        full_response = ""
+        
+        # Add a spinner while generating response
+        with st.spinner("Thinking..."):
+            for response in agent_team.run(prompt, stream=True):
+                full_response += response.content
+                response_container.markdown(full_response)
+
+        st.session_state.messages.append(
+            {"role": "assistant", "content": full_response}
+        )
