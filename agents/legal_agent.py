@@ -1,7 +1,7 @@
 from phi.agent import Agent
 from phi.knowledge.pdf import PDFUrlKnowledgeBase
-from phi.model.openai import OpenAIChat
 from phi.vectordb.pgvector import PgVector
+from phi.model.openai import OpenAIChat
 from phi.tools.exa import ExaTools
 
 db_url = "postgresql+psycopg://ai:ai@localhost:5532/ai"
