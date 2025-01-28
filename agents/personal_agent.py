@@ -9,6 +9,7 @@ from phi.knowledge.pdf import PDFUrlKnowledgeBase
 from phi.vectordb.pgvector import PgVector
 from phi.tools.crawl4ai_tools import Crawl4aiTools
 from phi.tools.github import GithubTools
+from phi.tools.reddit import RedditTools
 from datetime import datetime
 
 
@@ -19,6 +20,24 @@ knowledge_base = PDFUrlKnowledgeBase(
         "https://www.justice.gov/d9/criminal-ccips/legacy/2015/01/14/ccmanual_0.pdf",
     ],
     vector_db=PgVector(table_name="docs", db_url=db_url),
+)
+
+reddit_agent = Agent(
+    name="Reddit Agent",
+    tools=[RedditTools(client_id="", client_secret="", username="", password="")],
+    instructions=[
+        "You are a Reddit Agent that can:",
+        "- Search and browse subreddits",
+        "- Fetch posts, comments, and discussions",
+        "- Get trending topics and popular content",
+        "- Retrieve user information and post history",
+        "- Create posts when requested",
+        "- Monitor specific subreddits for updates",
+        "Always provide context and source links when sharing information",
+        "Format responses using proper Reddit markdown for readability",
+    ],
+    show_tool_calls=True,
+    markdown=True,
 )
 
 legal_agent = Agent(
@@ -80,9 +99,9 @@ personal_assistant = Agent(
 )
 
 agent_team = Agent(
-    team=[legal_agent, personal_assistant, calendar_agent],
+    team=[legal_agent, personal_assistant, calendar_agent,reddit_agent],
     instructions=[
-        "Use the LegalAdvisor for legal questions,PersonalAssistant for general tasks and CalendarAssistant for scheduling tasks.",
+        "Use the LegalAdvisor for legal questions,PersonalAssistant for general tasks and CalendarAssistant for scheduling tasks.Use RedditAgent for things related to reddit.",
         "Always provide sources and use markdown formatting for better readability.",
     ],
     show_tool_calls=True,
