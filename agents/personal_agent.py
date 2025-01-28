@@ -90,24 +90,25 @@ agent_team = Agent(
 )
 
 
-st.set_page_config(page_title="AI Assistant Team", page_icon="🤖", layout="wide")
+st.set_page_config(page_title="AI Agent Team", page_icon="🤖", layout="wide")
 
 
 with st.sidebar:
-    st.title("🤖 AI Assistant Team")
-    st.markdown("""
+    st.title("🤖 AI Agent Team")
+    st.markdown(
+        """
     This AI team consists of:
     - 👨‍⚖️ **Legal Advisor** - For legal information and advice
-    - 📅 **Calendar Assistant** - For scheduling and managing appointments
-    - 🌟 **Personal Assistant** - For general tasks, finance, and tech news
-    """)
-    
+    - 📅 **Calendar Agent** - For scheduling and managing appointments
+    - 🌟 **Personal Agent** - For general tasks, finance, and tech news
+    """
+    )
 
     if st.button("Clear Chat History"):
         st.session_state.messages = []
         st.rerun()
 
-st.title("💬 Chat with AI Assistant Team")
+st.title("💬 Chat with AI Agent Team")
 
 
 if "messages" not in st.session_state:
@@ -115,14 +116,16 @@ if "messages" not in st.session_state:
 
 
 for message in st.session_state.messages:
-    with st.chat_message(message["role"], avatar="🧑‍💻" if message["role"] == "user" else "🤖"):
+    with st.chat_message(
+        message["role"], avatar="🧑‍💻" if message["role"] == "user" else "🤖"
+    ):
         st.markdown(message["content"])
 
 
 if prompt := st.chat_input("How can I help you today?"):
 
     st.divider()
-    
+
     with st.chat_message("user", avatar="🧑‍💻"):
         st.markdown(prompt)
 
@@ -131,7 +134,6 @@ if prompt := st.chat_input("How can I help you today?"):
     with st.chat_message("assistant", avatar="🤖"):
         response_container = st.empty()
         full_response = ""
-        
 
         with st.spinner("Thinking..."):
             for response in agent_team.run(prompt, stream=True):
