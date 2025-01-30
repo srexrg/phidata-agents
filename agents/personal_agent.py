@@ -1,5 +1,6 @@
 from phi.agent import Agent
 import streamlit as st
+import os
 from phi.tools.duckduckgo import DuckDuckGo
 from phi.tools.yfinance import YFinanceTools
 from phi.tools.hackernews import HackerNews
@@ -9,9 +10,14 @@ from phi.knowledge.pdf import PDFUrlKnowledgeBase
 from phi.vectordb.pgvector import PgVector
 from phi.tools.crawl4ai_tools import Crawl4aiTools
 from phi.tools.github import GithubTools
+from phi.tools.arxiv_toolkit import ArxivToolkit
 from phi.tools.reddit import RedditTools
 from datetime import datetime
 
+REDDIT_CLIENT_ID = os.getenv("REDDIT_CLIENT_ID")
+REDDIT_CLIENT_SECRET = os.getenv("REDDIT_CLIENT_SECRET")
+REDDIT_USERNAME = os.getenv("REDDIT_USERNAME")
+REDDIT_PASSWORD = os.getenv("REDDIT_PASSWORD")
 
 db_url = "postgresql+psycopg://ai:ai@localhost:5532/ai"
 
@@ -22,9 +28,24 @@ knowledge_base = PDFUrlKnowledgeBase(
     vector_db=PgVector(table_name="docs", db_url=db_url),
 )
 
+arxiv_agent = Agent(
+    name="Arxiv Agent",
+    tools=[ArxivToolkit()],
+    description="You are a research assistant specializing in scientific publications from ArXiv.",
+    instructions=[
+        "For a given topic or query, search ArXiv for relevant publications.",
+        "Analyze the results and provide a summary of the most relevant findings.",
+        "Include titles, authors, and brief descriptions of the top papers.",
+        "Provide insights on the current state of research in the given area.",
+    ],
+    markdown=True,
+    show_tool_calls=True,
+    add_datetime_to_instructions=True,
+)
+
 reddit_agent = Agent(
     name="Reddit Agent",
-    tools=[RedditTools(client_id="", client_secret="", username="", password="")],
+    tools=[RedditTools(client_id=REDDIT_CLIENT_ID, client_secret=REDDIT_CLIENT_SECRET, username=REDDIT_USERNAME, password=REDDIT_PASSWORD)],
     instructions=[
         "You are a Reddit Agent that can:",
         "- Search and browse subreddits",
@@ -99,12 +120,15 @@ personal_assistant = Agent(
 )
 
 agent_team = Agent(
-    team=[legal_agent, personal_assistant, calendar_agent,reddit_agent],
+    team=[legal_agent, personal_assistant, calendar_agent,arxiv_agent,reddit_agent],
     instructions=[
         "Use the LegalAdvisor for legal questions,PersonalAssistant for general tasks and CalendarAssistant for scheduling tasks.Use RedditAgent for things related to reddit.",
+        "Use ArxivAgent for things related to arxiv.",
         "Always provide sources and use markdown formatting for better readability.",
     ],
     show_tool_calls=True,
+    add_chat_history_to_messages=True,
+    num_history_responses=3,
     markdown=True,
 )
 
