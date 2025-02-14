@@ -101,7 +101,7 @@ personal_assistant = Agent(
         DuckDuckGo(),
         YFinanceTools(),
         HackerNews(),
-        Crawl4aiTools(),
+        Crawl4aiTools(scrape=False,crawl=True),
         GithubTools(),
     ],
     description="I am your personal AI assistant, capable of helping with various tasks.",
