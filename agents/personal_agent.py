@@ -102,7 +102,7 @@ personal_assistant = Agent(
         YFinanceTools(),
         HackerNews(),
         Crawl4aiTools(),
-        # GithubTools(),
+        GithubTools(),
     ],
     description="I am your personal AI assistant, capable of helping with various tasks.",
     instructions=[
@@ -110,7 +110,7 @@ personal_assistant = Agent(
         "Provide financial data and analysis when requested.",
         "Share top stories from HackerNews when asked about tech news.",
         "Use the web crawler if asked to summarize or scrape a website.",
-        # "Use the github tool if asked to search or do tasks related to github"
+        "Use the github tool if asked to search or do tasks related to github"
         "Always provide sources for information.",
         "Use markdown formatting for better readability.",
     ],
