@@ -43,23 +43,23 @@ arxiv_agent = Agent(
     add_datetime_to_instructions=True,
 )
 
-reddit_agent = Agent(
-    name="Reddit Agent",
-    tools=[RedditTools(client_id=REDDIT_CLIENT_ID, client_secret=REDDIT_CLIENT_SECRET, username=REDDIT_USERNAME, password=REDDIT_PASSWORD)],
-    instructions=[
-        "You are a Reddit Agent that can:",
-        "- Search and browse subreddits",
-        "- Fetch posts, comments, and discussions",
-        "- Get trending topics and popular content",
-        "- Retrieve user information and post history",
-        "- Create posts when requested",
-        "- Monitor specific subreddits for updates",
-        "Always provide context and source links when sharing information",
-        "Format responses using proper Reddit markdown for readability",
-    ],
-    show_tool_calls=True,
-    markdown=True,
-)
+# reddit_agent = Agent(
+#     name="Reddit Agent",
+#     tools=[RedditTools(client_id=REDDIT_CLIENT_ID, client_secret=REDDIT_CLIENT_SECRET, username=REDDIT_USERNAME, password=REDDIT_PASSWORD)],
+#     instructions=[
+#         "You are a Reddit Agent that can:",
+#         "- Search and browse subreddits",
+#         "- Fetch posts, comments, and discussions",
+#         "- Get trending topics and popular content",
+#         "- Retrieve user information and post history",
+#         "- Create posts when requested",
+#         "- Monitor specific subreddits for updates",
+#         "Always provide context and source links when sharing information",
+#         "Format responses using proper Reddit markdown for readability",
+#     ],
+#     show_tool_calls=True,
+#     markdown=True,
+# )
 
 legal_agent = Agent(
     name="LegalAdvisor",
@@ -101,8 +101,8 @@ personal_assistant = Agent(
         DuckDuckGo(),
         YFinanceTools(),
         HackerNews(),
-        Crawl4aiTools(scrape=False,crawl=True),
-        GithubTools(),
+        Crawl4aiTools(),
+        # GithubTools(),
     ],
     description="I am your personal AI assistant, capable of helping with various tasks.",
     instructions=[
@@ -110,7 +110,7 @@ personal_assistant = Agent(
         "Provide financial data and analysis when requested.",
         "Share top stories from HackerNews when asked about tech news.",
         "Use the web crawler if asked to summarize or scrape a website.",
-        "Use the github tool if asked to search or do tasks related to github"
+        # "Use the github tool if asked to search or do tasks related to github"
         "Always provide sources for information.",
         "Use markdown formatting for better readability.",
     ],
@@ -120,9 +120,10 @@ personal_assistant = Agent(
 )
 
 agent_team = Agent(
-    team=[legal_agent, personal_assistant, calendar_agent,arxiv_agent,reddit_agent],
+    team=[legal_agent, personal_assistant,arxiv_agent,calendar_agent], #Use RedditAgent for things related to reddit.
     instructions=[
-        "Use the LegalAdvisor for legal questions,PersonalAssistant for general tasks and CalendarAssistant for scheduling tasks.Use RedditAgent for things related to reddit.",
+        "Use CalendarAssistant for scheduling tasks."
+        "Use the LegalAdvisor for legal questions,PersonalAssistant for general tasks",
         "Use ArxivAgent for things related to arxiv.",
         "Always provide sources and use markdown formatting for better readability.",
     ],
